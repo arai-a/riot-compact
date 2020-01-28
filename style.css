@@ -1,10 +1,10 @@
 /* ==== Lines with alternating color ==== */
 
-.mx_RoomView_MessageList > li:nth-of-type(2n) {
+.mx_RoomView_MessageList > li:not(.mx_RoomView_myReadMarker_container):nth-of-type(2n) {
   background-color: #ffffff;
 }
 
-.mx_RoomView_MessageList > li:nth-of-type(2n+1) {
+.mx_RoomView_MessageList > li:not(.mx_RoomView_myReadMarker_container):nth-of-type(2n+1) {
   background-color: #f8f8ff;
 }
 
