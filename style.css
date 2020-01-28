@@ -83,3 +83,9 @@ blockquote {
 .mx_RoomTile {
   height: 24px;
 }
+
+/* ==== Semi-transparent border of quote, when it overlaps with username ==== */
+
+blockquote.mx_ReplyThread {
+  border-left: 4px solid rgba(141,141,141,0.3);
+}
