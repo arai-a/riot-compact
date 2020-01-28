@@ -1,0 +1,69 @@
+/* ==== Lines with alternating color ==== */
+
+.mx_RoomView_MessageList li:nth-child(2n) {
+  background-color: #ffffff;
+}
+
+.mx_RoomView_MessageList li:nth-child(2n+1) {
+  background-color: #f8f8ff;
+}
+
+.mx_RoomView_MessageList li:hover {
+  background-color: #f0ffff;
+}
+
+/* ==== Bigger text ==== */
+
+.mx_EventTile_body {
+  font-size: 12pt !important;
+}
+
+.mx_MessageTimestamp {
+  font-size: 11pt;
+}
+
+.mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
+  font-size: 11pt;
+}
+
+/* ==== Put username and the first line in the same line ==== */
+
+.mx_EventTile_line,
+.mx_EventTile_reply {
+  padding-left: 160px;
+}
+
+.mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
+  float: left;
+}
+
+.mx_EventTile_line {
+  /* For unknown reason, changing background-color causes the username to be
+   * disappeared. */
+  background-color: inherit !important;
+}
+
+.mx_MatrixChat_useCompactLayout .mx_EventTile {
+  padding-top: 0px;
+}
+
+.mx_MessageActionBar {
+  top: 0px;
+}
+
+/* ==== Smaller avatar ==== */
+
+.mx_MatrixChat_useCompactLayout div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
+  transform: scale(0.5) ;
+  transform-origin: top left;
+  left: 48px;
+}
+
+/* ==== Smaller quote ==== */
+
+blockquote {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
