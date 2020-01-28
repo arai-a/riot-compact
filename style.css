@@ -71,3 +71,9 @@ blockquote {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
+
+/* ==== Compact rooms list ==== */
+
+.mx_RoomTile {
+  height: 24px;
+}
