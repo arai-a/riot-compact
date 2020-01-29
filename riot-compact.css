@@ -1,10 +1,10 @@
 /* ==== Lines with alternating color ==== */
 
-.mx_RoomView_MessageList > li:not(.mx_RoomView_myReadMarker_container):nth-of-type(2n) {
+.mx_RoomView_MessageList > li.ext-line-even {
   background-color: #ffffff;
 }
 
-.mx_RoomView_MessageList > li:not(.mx_RoomView_myReadMarker_container):nth-of-type(2n+1) {
+.mx_RoomView_MessageList > li.ext-line-odd {
   background-color: #f8f8ff;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .mx_EventListSummary {
-  background-color: #f8f8f8;
+  background-color: #f0f0f0;
 }
 
 /* ==== Bigger text ==== */

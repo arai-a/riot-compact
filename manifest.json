@@ -15,10 +15,12 @@
         "https://chat.mozilla.org/*"
       ],
       "run_at": "document_start",
-      "match_about_blank": true,
       "all_frames": false,
+      "js": [
+        "riot-compact.js"
+      ],
       "css": [
-        "style.css"
+        "riot-compact.css"
       ]
     }
   ],
