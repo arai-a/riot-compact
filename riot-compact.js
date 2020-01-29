@@ -52,15 +52,18 @@ const refreshTask = new Task(() => {
   onRoomChange().catch(e => console.error(e));
 }, 500);
 
+function hasAddedNodes(mutationsList) {
+  for (const item of mutationsList) {
+    if (item.addedNodes.length) {
+      return true;
+    }
+  }
+  return false;
+}
+
 async function hookUISwitch() {
   const observer = new MutationObserver(mutationsList => {
-    let hasAdd = false;
-    for (const item of mutationsList) {
-      if (item.addedNodes.length) {
-        hasAdd = true;
-      }
-    }
-    if (hasAdd) {
+    if (hasAddedNodes(mutationsList)) {
       refreshTask.run();
     }
   });
@@ -175,8 +178,10 @@ async function onRoomChange() {
   if (!list) {
     return;
   }
-  const observer = new MutationObserver(() => {
-    updateTask.run();
+  const observer = new MutationObserver(mutationsList => {
+    if (hasAddedNodes(mutationsList)) {
+      updateTask.run();
+    }
   });
   observer.observe(list, {
     childList: true,
