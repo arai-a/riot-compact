@@ -52,9 +52,7 @@ const refreshTask = new Task(() => {
   onRoomChange().catch(e => console.error(e));
 }, 500);
 
-async function hookRoomSwitch() {
-  // When switching room, all nodes under mx_MatrixChat gets replaced.
-  const node = await waitForClassName("mx_MatrixChat");
+async function hookUISwitch() {
   const observer = new MutationObserver(mutationsList => {
     let hasAdd = false;
     for (const item of mutationsList) {
@@ -66,7 +64,16 @@ async function hookRoomSwitch() {
       refreshTask.run();
     }
   });
+
+  // When switching room, all nodes gets replaced.
+  const node = await waitForClassName("mx_MatrixChat");
   observer.observe(node, {
+    childList: true,
+  });
+
+  // In some case, timeline content gets replaced.
+  const node2 = await waitForClassName("mx_RoomView_timeline");
+  observer.observe(node2, {
     childList: true,
   });
 }
@@ -75,15 +82,15 @@ function getItems(list) {
   const items = [];
   for (const item of list.childNodes) {
     const nodeName = item.nodeName.toLowerCase();
-    if (nodeName !== "li") {
-      continue;
-    }
-
-    if (!("classList" in item)) {
-      continue;
-    }
-
-    if (item.classList.contains(".mx_RoomView_myReadMarker_container")) {
+    if (nodeName === "li") {
+      if (item.classList.contains("mx_RoomView_myReadMarker_container")) {
+        continue;
+      }
+    } else if (nodeName === "div") {
+      if (!item.classList.contains("mx_EventListSummary")) {
+        continue;
+      }
+    } else {
       continue;
     }
 
@@ -165,6 +172,9 @@ async function onRoomChange() {
   }, 500);
 
   const list = await waitForClassName("mx_RoomView_MessageList");
+  if (!list) {
+    return;
+  }
   const observer = new MutationObserver(() => {
     updateTask.run();
   });
@@ -188,7 +198,7 @@ async function onRoomChange() {
 
 async function onLoad() {
   await onRoomChange();
-  await hookRoomSwitch();
+  await hookUISwitch();
 }
 
 onLoad().catch(e => console.error(e));

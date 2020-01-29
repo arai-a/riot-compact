@@ -1,19 +1,15 @@
 /* ==== Lines with alternating color ==== */
 
-.mx_RoomView_MessageList > li.ext-line-even {
+.mx_RoomView_MessageList > .ext-line-even {
   background-color: #ffffff;
 }
 
-.mx_RoomView_MessageList > li.ext-line-odd {
+.mx_RoomView_MessageList > .ext-line-odd {
   background-color: #f8f8ff;
 }
 
 .mx_RoomView_MessageList li:hover {
   background-color: #f0ffff;
-}
-
-.mx_EventListSummary {
-  background-color: #f0f0f0;
 }
 
 /* ==== Bigger text ==== */
