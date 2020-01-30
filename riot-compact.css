@@ -30,11 +30,17 @@
 
 .mx_EventTile_line,
 .mx_EventTile_reply {
-  padding-left: 160px;
+  padding-left: 165px;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
   float: left;
+  width: 100px;
+  overflow: visible;
+}
+
+.mx_EventTile .mx_SenderProfile .mx_SenderProfile_name {
+  white-space: normal;
 }
 
 .mx_EventTile_line {
@@ -78,10 +84,4 @@ blockquote {
 
 .mx_RoomTile {
   height: 24px;
-}
-
-/* ==== Semi-transparent border of quote, when it overlaps with username ==== */
-
-blockquote.mx_ReplyThread {
-  border-left: 4px solid rgba(141,141,141,0.3);
 }
