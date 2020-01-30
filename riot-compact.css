@@ -65,6 +65,8 @@
 
 .mx_EventTile_line, .mx_EventTile_reply {
   margin-right: 0px;
+  min-height: auto;
+  line-height: 16pt;
 }
 
 /* ==== Do not put username and image in the same line  ==== */
