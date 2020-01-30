@@ -18,24 +18,28 @@
 
 /* ==== Bigger text ==== */
 
-.mx_EventTile_body {
+.mx_EventListSummary_summary,
+.mx_EventTile_line,
+.mx_EventTile_info,
+.mx_EventTile_body,
+.mx_EventTile_content {
   font-size: 12pt !important;
 }
 
 .mx_MessageTimestamp {
-  font-size: 11pt;
+  font-size: 12pt;
   color: #004080;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
-  font-size: 11pt;
+  font-size: 12pt;
 }
 
 /* ==== Put username and the first line in the same line ==== */
 
 /*
  * |                                                            |
- * |        65px        |   98px   |                            |
+ * |        65px        |  108px   |                            |
  * |<------------------>|<-------->|                            |
  * |                    |          |                            |
  * |  48px   |  15px  | |          |             |  90px  | 8px |
@@ -48,14 +52,14 @@
  * | 46px  |                         |         |                |
  * |<----->|                         |         |                |
  * |                                 |         |                |
- * |              165px              |         |     100px      |
+ * |              175px              |         |     100px      |
  * |<------------------------------->|         |<-------------->|
  * |                                                            |
  */
 
 .mx_EventTile_line,
 .mx_EventTile_reply {
-  padding-left: 165px;
+  padding-left: 175px;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
@@ -63,7 +67,7 @@
    * and in that case it may be taller than the comment itself. */
   float: left;
   padding-left: 65px;
-  width: 98px;
+  width: 108px;
   overflow: visible;
 }
 
