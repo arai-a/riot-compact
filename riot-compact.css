@@ -39,7 +39,7 @@
 
 /*
  * |                                                            |
- * |        65px        |  108px   |                            |
+ * |        65px        |  110px   |                            |
  * |<------------------>|<-------->|                            |
  * |                    |          |                            |
  * |  48px   |  15px  | |          |             |  90px  | 8px |
@@ -52,14 +52,14 @@
  * | 46px  |                         |         |                |
  * |<----->|                         |         |                |
  * |                                 |         |                |
- * |              175px              |         |     100px      |
+ * |              180px              |         |     100px      |
  * |<------------------------------->|         |<-------------->|
  * |                                                            |
  */
 
 .mx_EventTile_line,
 .mx_EventTile_reply {
-  padding-left: 175px;
+  padding-left: 180px;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
@@ -67,7 +67,7 @@
    * and in that case it may be taller than the comment itself. */
   float: left;
   padding-left: 65px;
-  width: 108px;
+  width: 110px;
   overflow: visible;
 }
 
