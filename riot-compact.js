@@ -35,22 +35,16 @@ class Task {
         this.lastTime = Date.now();
 
         const f = this.f;
-        f();
+        f().catch(e => console.error(e));
       }, this.timeout);
       return;
     }
 
     this.lastTime = now;
     const f = this.f;
-    f();
+    f().catch(e => console.error(e));
   }
 }
-
-let existingObserver = null;
-
-const refreshTask = new Task(() => {
-  onRoomChange().catch(e => console.error(e));
-}, 500);
 
 function hasAddedNodes(mutationsList) {
   for (const item of mutationsList) {
@@ -133,76 +127,115 @@ function getFirstItemIsOdd(items, oddEvenMap) {
   return firstItemIsOdd;
 }
 
+let existingObservers = [];
+
 async function onRoomChange() {
   // Map from item's token to `odd` flag.
   //
-  // The entry of this map increases whenever updateTask runs,
+  // The entry of this map increases whenever colorTimeline is called,
   // but this will be released whenever switching room, so this won't make much
   // trouble.
   const oddEvenMap = {};
 
-  const updateTask = new Task(() => {
-    // Update coloring when new items are added.
-    const items = getItems(list);
-    const firstItemIsOdd = getFirstItemIsOdd(items, oddEvenMap);
-    noteOddEven(firstItemIsOdd, items, oddEvenMap);
-    setClass(firstItemIsOdd, items);
-  }, 500);
-
-  const list = await waitForClassName("mx_RoomView_MessageList");
+  let list = await waitForClassName("mx_RoomView_MessageList");
   if (!list) {
     return;
   }
-  const observer = new MutationObserver(mutationsList => {
-    if (hasAddedNodes(mutationsList)) {
-      updateTask.run();
-    }
-  });
-  observer.observe(list, {
-    childList: true,
-  });
 
-  if (existingObserver) {
-    try {
-      existingObserver.disconnect();
-    } catch (e) {
-    }
-  }
-  existingObserver = observer;
+  const updateTask = new Task(() => {
+    colorTimeline(false);
+  }, 500);
 
-  const items = getItems(list);
-  const firstItemIsOdd = false;
-  noteOddEven(firstItemIsOdd, items, oddEvenMap);
-  setClass(firstItemIsOdd, items);
-
-  async function checkListAlive(list) {
-    const currentList = await waitForClassName("mx_RoomView_MessageList");
-    if (list != currentList) {
-      await onRoomChange();
-    }
-  }
-
-  async function hookUISwitch() {
+  function hookTimelineModification() {
     const observer = new MutationObserver(mutationsList => {
       if (hasAddedNodes(mutationsList)) {
-        checkListAlive().catch(e => console.error(e));
+        updateTask.run();
       }
     });
+    existingObservers.push(observer);
 
+    observer.observe(list, {
+      childList: true,
+    });
+  }
+
+  function disconnectObservers() {
+    for (const obs of existingObservers) {
+      try {
+        obs.disconnect();
+      } catch (e) {
+      }
+    }
+    existingObservers = [];
+  }
+
+  function colorTimeline(first) {
+    const items = getItems(list);
+    const firstItemIsOdd = first ? false : getFirstItemIsOdd(items, oddEvenMap);
+    noteOddEven(firstItemIsOdd, items, oddEvenMap);
+    setClass(firstItemIsOdd, items);
+  }
+
+  async function checkListAlive(task) {
+    const currentList = await waitForClassName("mx_RoomView_MessageList");
+    if (list != currentList) {
+      task.run();
+    }
+  }
+
+  const roomSwitchTask = new Task(async () => {
+    await onRoomChange();
+  }, 500);
+
+  async function hookRoomSwitch() {
     // When switching room, all nodes gets replaced.
+
+    const observer = new MutationObserver(mutationsList => {
+      if (hasAddedNodes(mutationsList)) {
+        checkListAlive(roomSwitchTask).catch(e => console.error(e));
+      }
+    });
+    existingObservers.push(observer);
+
     const node = await waitForClassName("mx_MatrixChat");
     observer.observe(node, {
       childList: true,
     });
+  }
 
-    // In some case, timeline content gets replaced.
-    const node2 = await waitForClassName("mx_RoomView_timeline");
-    observer.observe(node2, {
+  async function onTimelineReconstruct(first) {
+    if (!first) {
+      list = await waitForClassName("mx_RoomView_MessageList");
+    }
+
+    disconnectObservers();
+    hookTimelineModification();
+    colorTimeline(first);
+    await hookRoomSwitch();
+    await hookTimelineReconstruct();
+  }
+
+  const timelineReconstructTask = new Task(async () => {
+    await onTimelineReconstruct(false);
+  }, 500);
+
+  async function hookTimelineReconstruct() {
+    // In some case (maybe on scroll down), timeline content gets replaced.
+
+    const observer = new MutationObserver(mutationsList => {
+      if (hasAddedNodes(mutationsList)) {
+        checkListAlive(timelineReconstructTask).catch(e => console.error(e));
+      }
+    });
+    existingObservers.push(observer);
+
+    const node = await waitForClassName("mx_RoomView_timeline");
+    observer.observe(node, {
       childList: true,
     });
   }
 
-  await hookUISwitch();
+  await onTimelineReconstruct(true);
 }
 
 async function onLoad() {
