@@ -57,6 +57,16 @@
   top: 0px;
 }
 
+/* ==== Remove right margin from message ==== */
+
+.mx_EventTile_content {
+  margin-right: 0px;
+}
+
+.mx_EventTile_line, .mx_EventTile_reply {
+  margin-right: 0px;
+}
+
 /* ==== Do not put username and image in the same line  ==== */
 
 .mx_MImageBody {
@@ -66,7 +76,7 @@
 /* ==== Smaller avatar ==== */
 
 .mx_MatrixChat_useCompactLayout div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
-  transform: scale(0.5) ;
+  transform: scale(0.5);
   transform-origin: top left;
   left: 48px;
 }
