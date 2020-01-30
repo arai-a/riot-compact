@@ -112,11 +112,6 @@ function noteOddEven(firstItemIsOdd, items, oddEvenMap) {
 
 function setClass(odd, items) {
   for (const item of items) {
-    if (odd) {
-      if (item.node.classList.contains("ext-line-even")) {
-        console.log("@@@@ FLIP!");
-      }
-    }
     item.node.classList.remove(odd ? "ext-line-even" : "ext-line-odd");
     item.node.classList.add(odd ? "ext-line-odd" : "ext-line-even");
     odd = !odd;
