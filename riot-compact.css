@@ -20,6 +20,7 @@
 
 .mx_MessageTimestamp {
   font-size: 11pt;
+  color: #004080;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
