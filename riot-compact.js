@@ -61,26 +61,6 @@ function hasAddedNodes(mutationsList) {
   return false;
 }
 
-async function hookUISwitch() {
-  const observer = new MutationObserver(mutationsList => {
-    if (hasAddedNodes(mutationsList)) {
-      refreshTask.run();
-    }
-  });
-
-  // When switching room, all nodes gets replaced.
-  const node = await waitForClassName("mx_MatrixChat");
-  observer.observe(node, {
-    childList: true,
-  });
-
-  // In some case, timeline content gets replaced.
-  const node2 = await waitForClassName("mx_RoomView_timeline");
-  observer.observe(node2, {
-    childList: true,
-  });
-}
-
 function getItems(list) {
   const items = [];
   for (const item of list.childNodes) {
@@ -199,11 +179,39 @@ async function onRoomChange() {
   const firstItemIsOdd = false;
   noteOddEven(firstItemIsOdd, items, oddEvenMap);
   setClass(firstItemIsOdd, items);
+
+  async function checkListAlive(list) {
+    const currentList = await waitForClassName("mx_RoomView_MessageList");
+    if (list != currentList) {
+      await onRoomChange();
+    }
+  }
+
+  async function hookUISwitch() {
+    const observer = new MutationObserver(mutationsList => {
+      if (hasAddedNodes(mutationsList)) {
+        checkListAlive().catch(e => console.error(e));
+      }
+    });
+
+    // When switching room, all nodes gets replaced.
+    const node = await waitForClassName("mx_MatrixChat");
+    observer.observe(node, {
+      childList: true,
+    });
+
+    // In some case, timeline content gets replaced.
+    const node2 = await waitForClassName("mx_RoomView_timeline");
+    observer.observe(node2, {
+      childList: true,
+    });
+  }
+
+  await hookUISwitch();
 }
 
 async function onLoad() {
   await onRoomChange();
-  await hookUISwitch();
 }
 
 onLoad().catch(e => console.error(e));
