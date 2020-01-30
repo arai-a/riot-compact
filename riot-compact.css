@@ -12,6 +12,10 @@
   background-color: #f0ffff;
 }
 
+.mx_EventTile_line {
+  background-color: inherit !important;
+}
+
 /* ==== Bigger text ==== */
 
 .mx_EventTile_body {
@@ -29,25 +33,42 @@
 
 /* ==== Put username and the first line in the same line ==== */
 
+/*
+ * |                                                            |
+ * |        65px        |   98px   |                            |
+ * |<------------------>|<-------->|                            |
+ * |                    |          |                            |
+ * |  48px   |  15px  | |          |             |  90px  | 8px |
+ * |<------->|<------>| |          |             |<------>|<--->|
+ * |         |        | |          |             |        |     |
+ * +-------+ +--------+ +----------+ +---------+ +--------+     |
+ * | 00:00 | | (icon) | | username | | comment | | option |     |
+ * +-------+ +--------+ +----------+ +---------+ +--------+     |
+ * |       |                         |         |                |
+ * | 46px  |                         |         |                |
+ * |<----->|                         |         |                |
+ * |                                 |         |                |
+ * |              165px              |         |     100px      |
+ * |<------------------------------->|         |<-------------->|
+ * |                                                            |
+ */
+
 .mx_EventTile_line,
 .mx_EventTile_reply {
   padding-left: 165px;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
+  /* Cannot use "position: absolute", because username can be wrapped
+   * and in that case it may be taller than the comment itself. */
   float: left;
-  width: 100px;
+  padding-left: 65px;
+  width: 98px;
   overflow: visible;
 }
 
 .mx_EventTile .mx_SenderProfile .mx_SenderProfile_name {
   white-space: normal;
-}
-
-.mx_EventTile_line {
-  /* For unknown reason, changing background-color causes the username to be
-   * disappeared. */
-  background-color: inherit !important;
 }
 
 .mx_MatrixChat_useCompactLayout .mx_EventTile {
@@ -68,6 +89,7 @@
   margin-right: 0px;
   min-height: auto;
   line-height: 16pt;
+  padding-right: 100px;
 }
 
 /* ==== Do not put username and image in the same line  ==== */
