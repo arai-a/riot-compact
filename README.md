@@ -5,6 +5,7 @@ Style and some JS code to make chat.mozilla.org log more compact.
  * Smaller avatar
  * Compact rooms list
  * Alternating line coloring (done by JS)
+ * Add Month/Date to the timestamp (done by JS)
 
 WARNING
 
