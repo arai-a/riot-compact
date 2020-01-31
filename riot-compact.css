@@ -256,5 +256,43 @@ blockquote {
 }
 
 .mx_EntityTile_power {
+  /*
+   * [original]
+   * width: 36px, padding-right: 12px, right: 6px
+   *
+   *             width            padding
+   *   |          36px          |  12px  |
+   *   +<---------------------->+<------>+
+   *                                     |
+   *                               right |
+   *                                  6px|
+   *                                |<-->|
+   *                                ^
+   *                                |
+   *                       place power icon here
+   *
+   * =>
+   *
+   * [modified]
+   * width: 18px, transform: scale(0.5), padding-right: 2px
+   *
+   *             width
+   *   |          18px          |
+   *   +<---------------------->+
+   *   |
+   *   | width      | padding
+   *   | *scale     | *scape
+   *   |    9px     |1px|   right
+   *   +<---------->+<->+<--------->|
+   *                                ^
+   *                                |
+   *                       place power icon here
+   *
+   * (( 36 (=original width) + 12 (=original padding) - 6 (=original right) )
+   *  * 0.5 (=scale)
+   *  - 9 (=modified width * scale) - 1 (=modified padding * scale))
+   * / 0.5 (=scale)
+   *
+   */
   right: -22px;
 }
