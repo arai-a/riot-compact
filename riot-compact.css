@@ -300,3 +300,9 @@ blockquote {
    */
   right: -22px;
 }
+
+/* ==== No padding around message list ==== */
+
+.mx_RoomView_MessageList {
+  padding: 0px;
+}
