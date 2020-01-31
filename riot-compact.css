@@ -73,12 +73,12 @@
  * |                                                            |
  */
 
-div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
+.mx_RoomView_body div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   top: 4px;
   left: 98px;
 }
 
-.mx_EventTile .mx_SenderProfile {
+.mx_RoomView_body .mx_EventTile .mx_SenderProfile {
   /* Cannot use "position: absolute", because username can be wrapped
    * and in that case it may be taller than the comment itself. */
   float: left;
@@ -88,24 +88,24 @@ div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   overflow: visible;
 }
 
-.mx_EventTile .mx_SenderProfile .mx_SenderProfile_name {
+.mx_RoomView_body .mx_EventTile .mx_SenderProfile .mx_SenderProfile_name {
   white-space: normal;
 }
 
-.mx_EventTile {
+.mx_RoomView_body .mx_EventTile {
   padding-top: 0px !important;
 }
 
-.mx_EventTile:not(.mx_EventTile_emote):not(.mx_EventTile_info) .mx_EventTile_line,
+.mx_RoomView_body .mx_EventTile:not(.mx_EventTile_emote):not(.mx_EventTile_info) .mx_EventTile_line,
 .mx_EventTile:not(.mx_EventTile_emote) .mx_EventTile_reply {
   padding-left: 230px;
 }
 
-.mx_MessageActionBar {
+.mx_RoomView_body .mx_MessageActionBar {
   top: 0px;
 }
 
-.mx_ReplyThread .mx_EventTile {
+.mx_RoomView_body .mx_ReplyThread .mx_EventTile {
   /* Avoid putting reply in the different line than username. */
   clear: none;
 }
