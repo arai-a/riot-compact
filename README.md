@@ -4,6 +4,7 @@ Style and some JS code to make chat.mozilla.org log more compact.
  * Same font size across timestamp/username/comment/etc
  * Smaller avatar
  * Compact rooms list
+ * Compact members list
  * Alternating line coloring (done by JS)
  * Add Month/Date to the timestamp (done by JS)
 

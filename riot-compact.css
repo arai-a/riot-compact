@@ -244,3 +244,17 @@ blockquote {
 .mx_LinkPreviewWidget_description {
   margin-top: 4px;
 }
+
+/* ==== Smaller member list ==== */
+
+.mx_EntityTile_avatar, .mx_GroupRoomTile_avatar {
+  padding: 2px;
+  width: 18px;
+  height: 18px;
+  transform: scale(0.5);
+  transform-origin: top left;
+}
+
+.mx_EntityTile_power {
+  right: -22px;
+}
