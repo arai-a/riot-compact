@@ -55,6 +55,19 @@ function hasAddedNodes(mutationsList) {
   return false;
 }
 
+function addDate(list) {
+  function pad2(n) {
+    return n.toString().padStart(2, "0");
+  }
+
+  const timestamps = list.getElementsByClassName("mx_MessageTimestamp");
+  for (const timestamp of timestamps) {
+    const date = new Date(timestamp.getAttribute("title"));
+    const prefix = `${pad2(date.getMonth() + 1)}/${pad2(date.getDate())} `;
+    timestamp.setAttribute("ext-date", prefix);
+  }
+}
+
 function getItems(list) {
   const items = [];
   for (const item of list.childNodes) {
@@ -143,6 +156,7 @@ async function onRoomChange() {
   }
 
   const updateTask = new Task(() => {
+    addDate(list);
     colorTimeline(false);
   }, 500);
 
@@ -210,6 +224,7 @@ async function onRoomChange() {
 
     disconnectObservers();
     hookTimelineModification();
+    addDate(list);
     colorTimeline(first);
     await hookRoomSwitch();
     await hookTimelineReconstruct();

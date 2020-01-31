@@ -39,35 +39,56 @@
 
 /*
  * |                                                            |
- * |        65px        |  110px   |                            |
+ * |       115px        |  110px   |                            |
  * |<------------------>|<-------->|                            |
  * |                    |          |                            |
- * |  48px   |  15px  | |          |             |  90px  | 8px |
+ * |  98px   |  15px  | |          |             |  90px  | 8px |
  * |<------->|<------>| |          |             |<------>|<--->|
  * |         |        | |          |             |        |     |
  * +-------+ +--------+ +----------+ +---------+ +--------+     |
- * | 00:00 | | (icon) | | username | | comment | | option |     |
- * | [abs] | | [abs]  | | [float]  | | comment | | [abs]  |     |
+ * | 00:00 | | avatar | | username | | comment | | option |     |
+ * | [abs] | | [abs]  | | [float]  | |         | | [abs]  |     |
  * +-------+ +--------+ +----------+ +---------+ +--------+     |
  * |       |                         |         |                |
- * | 46px  |                         |         |                |
+ * | 96px  |                         |         |                |
  * |<----->|                         |         |                |
  * |                                 |         |                |
- * |              180px              |         |     100px      |
+ * |              230px              |         |     100px      |
  * |<------------------------------->|         |<-------------->|
  * |                                                            |
+ *
+ *
+ * |                                            |
+ * |    113px   |  15px  |          |  90px  | 8px |
+ * |<---------->|<------>|          |<------>|<--->|
+ * |            |        |          |        |     |
+ * +-------+    +--------+ +------+ +--------+     |
+ * | 00:00 |    | avatar | | info | | option |     |
+ * | [abs] |    | [abs]  | |      | | [abs]  |     |
+ * +-------+    +--------+ +------+ +--------+     |
+ * |       |               |      |                |
+ * | 96px  |               |      |                |
+ * |<----->|               |      |                |
+ * |                       |      |                |
+ * |          230px        |      |     100px      |
+ * |<--------------------->|      |<-------------->|
+ * |                                            |
  */
 
-.mx_EventTile_line,
-.mx_EventTile_reply {
-  padding-left: 180px;
+div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
+  top: 4px;
+  left: 98px;
+}
+
+.mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
+  left: 120px;
 }
 
 .mx_EventTile .mx_SenderProfile {
   /* Cannot use "position: absolute", because username can be wrapped
    * and in that case it may be taller than the comment itself. */
   float: left;
-  padding-left: 65px;
+  padding-left: 115px;
   line-height: 16pt;
   width: 110px;
   overflow: visible;
@@ -81,8 +102,32 @@
   padding-top: 0px !important;
 }
 
+.mx_EventTile:not(.mx_EventTile_emote):not(.mx_EventTile_info) .mx_EventTile_line,
+.mx_EventTile:not(.mx_EventTile_emote) .mx_EventTile_reply {
+  padding-left: 230px;
+}
+
+.mx_EventTile_emote .mx_EventTile_line,
+.mx_EventTile_emote .mx_EventTile_reply {
+  padding-left: 115px;
+}
+
+.mx_EventTile_info .mx_EventTile_line {
+  padding-left: 140px;
+}
+
 .mx_MessageActionBar {
   top: 0px;
+}
+
+.mx_EventListSummary > .mx_EventTile_line {
+  padding-left: 120px;
+}
+
+/* ==== Date before timestamp ==== */
+
+.mx_MessageTimestamp::before {
+  content: attr(ext-date);
 }
 
 /* ==== Remove right margin from message ==== */
@@ -109,17 +154,15 @@
 div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   transform: scale(0.5);
   transform-origin: top left;
-  top: 4px;
-  left: 48px;
 }
 
 /* ==== Smaller quote ==== */
 
 blockquote {
-    margin-block-start: 0em;
-    margin-block-end: 0em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
 }
 
 /* ==== Compact rooms list ==== */
