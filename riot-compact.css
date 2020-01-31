@@ -31,8 +31,8 @@
   color: #004080;
 }
 
-.mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
-  font-size: 12pt;
+.mx_EventTile .mx_SenderProfile {
+  font-size: 12pt !important;
 }
 
 /* ==== Put timestamp, avatar, username, and comment in the same line ==== */
@@ -63,11 +63,12 @@
   padding-left: 180px;
 }
 
-.mx_MatrixChat_useCompactLayout .mx_EventTile .mx_SenderProfile {
+.mx_EventTile .mx_SenderProfile {
   /* Cannot use "position: absolute", because username can be wrapped
    * and in that case it may be taller than the comment itself. */
   float: left;
   padding-left: 65px;
+  line-height: 16pt;
   width: 110px;
   overflow: visible;
 }
@@ -76,8 +77,8 @@
   white-space: normal;
 }
 
-.mx_MatrixChat_useCompactLayout .mx_EventTile {
-  padding-top: 0px;
+.mx_EventTile {
+  padding-top: 0px !important;
 }
 
 .mx_MessageActionBar {
@@ -105,9 +106,10 @@
 
 /* ==== Smaller avatar ==== */
 
-.mx_MatrixChat_useCompactLayout div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
+div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   transform: scale(0.5);
   transform-origin: top left;
+  top: 4px;
   left: 48px;
 }
 
