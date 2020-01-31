@@ -105,6 +105,11 @@ div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   top: 0px;
 }
 
+.mx_ReplyThread .mx_EventTile {
+  /* Avoid putting reply in the different line than username. */
+  clear: none;
+}
+
 /*
  * |                                                            |
  * |  98px   |  15px  |                          |  90px  | 8px |
@@ -222,4 +227,20 @@ blockquote {
 
 .mx_RoomTile {
   height: 24px;
+}
+
+/* ==== Smaller link preview ==== */
+
+.mx_LinkPreviewWidget_image {
+  height: 50px !important;
+  flex: 0 0 50px;
+}
+
+.mx_LinkPreviewWidget_image img {
+  max-width: 50px !important;
+  max-height: 50px !important;
+}
+
+.mx_LinkPreviewWidget_description {
+  margin-top: 4px;
 }
