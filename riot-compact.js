@@ -46,215 +46,229 @@ class Task {
   }
 }
 
-function hasAddedNodes(mutationsList) {
-  for (const item of mutationsList) {
-    if (item.addedNodes.length) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function addDate(list) {
-  function pad2(n) {
-    return n.toString().padStart(2, "0");
+class AddedNodeObservers {
+  constructor() {
+    this.observers = [];
   }
 
-  const timestamps = list.getElementsByClassName("mx_MessageTimestamp");
-  for (const timestamp of timestamps) {
-    const date = new Date(timestamp.getAttribute("title"));
-    const prefix = `${pad2(date.getMonth() + 1)}/${pad2(date.getDate())} `;
-    timestamp.setAttribute("ext-date", prefix);
-  }
-}
-
-function getItems(list) {
-  const items = [];
-  for (const item of list.childNodes) {
-    const nodeName = item.nodeName.toLowerCase();
-    if (nodeName === "li") {
-      if (item.classList.contains("mx_RoomView_myReadMarker_container")) {
-        continue;
-      }
-    } else if (nodeName === "div") {
-      if (!item.classList.contains("mx_EventListSummary")) {
-        continue;
-      }
-    } else {
-      continue;
-    }
-
-    const token = item.getAttribute("data-scroll-tokens");
-    items.push({ node: item, token });
-  }
-  return items;
-}
-
-function noteOddEven(firstItemIsOdd, items, oddEvenMap) {
-  function note(index, token) {
-    const odd = firstItemIsOdd
-          ? !(index % 2)
-          : !!(index % 2);
-    oddEvenMap[token] = odd;
-  }
-
-  // Note the first one with token.
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    if (item.token) {
-      note(i, item.token);
-      break;
-    }
-  }
-
-  // Note the last one with token.
-  for (let i = items.length - 1; i >= 0; i--) {
-    const item = items[i];
-    if (item.token) {
-      note(i, item.token);
-      break;
-    }
-  }
-}
-
-function setClass(odd, items) {
-  for (const item of items) {
-    item.node.classList.remove(odd ? "ext-line-even" : "ext-line-odd");
-    item.node.classList.add(odd ? "ext-line-odd" : "ext-line-even");
-    odd = !odd;
-  }
-}
-
-function getFirstItemIsOdd(items, oddEvenMap) {
-  let firstItemIsOdd = false;
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-
-    if (item.token in oddEvenMap) {
-      firstItemIsOdd = oddEvenMap[item.token]
-        ? !(i % 2)
-        : !!(i % 2);
-      break;
-    }
-  }
-  return firstItemIsOdd;
-}
-
-let existingObservers = [];
-
-async function onRoomChange() {
-  // Map from item's token to `odd` flag.
-  //
-  // The entry of this map increases whenever colorTimeline is called,
-  // but this will be released whenever switching room, so this won't make much
-  // trouble.
-  const oddEvenMap = {};
-
-  let list = await waitForClassName("mx_RoomView_MessageList");
-  if (!list) {
-    return;
-  }
-
-  const updateTask = new Task(() => {
-    addDate(list);
-    colorTimeline(false);
-  }, 500);
-
-  function hookTimelineModification() {
-    const observer = new MutationObserver(mutationsList => {
-      if (hasAddedNodes(mutationsList)) {
-        updateTask.run();
+  add(node, callback) {
+    const obs = new MutationObserver(mutationsList => {
+      if (this.hasAddedNodes(mutationsList)) {
+        callback().catch(e => console.error(e));
       }
     });
-    existingObservers.push(observer);
+    this.observers.push(obs);
 
-    observer.observe(list, {
+    obs.observe(node, {
       childList: true,
     });
   }
 
-  function disconnectObservers() {
-    for (const obs of existingObservers) {
+  disconnectAll() {
+    for (const obs of this.observers) {
       try {
         obs.disconnect();
       } catch (e) {
       }
     }
-    existingObservers = [];
+    this.observers = [];
   }
 
-  function colorTimeline(first) {
-    const items = getItems(list);
-    const firstItemIsOdd = first ? false : getFirstItemIsOdd(items, oddEvenMap);
-    noteOddEven(firstItemIsOdd, items, oddEvenMap);
-    setClass(firstItemIsOdd, items);
-  }
-
-  async function checkListAlive(task) {
-    const currentList = await waitForClassName("mx_RoomView_MessageList");
-    if (list != currentList) {
-      task.run();
+  hasAddedNodes(mutationsList) {
+    for (const item of mutationsList) {
+      if (item.addedNodes.length) {
+        return true;
+      }
     }
+    return false;
+  }
+}
+
+class TimelineModifier {
+  constructor() {
+    // The list element for timeline.
+    this.list = null;
+
+    // The map from item's token to `odd` flag.
+    //
+    // The entry of this map increases whenever noteOddEven is called,
+    // but this will be cleared whenever switching room, so this won't make much
+    // trouble.
+    this.oddEvenMap = {};
+
+    this.observers = new AddedNodeObservers();
+
+    this.updateTask = new Task(async () => {
+      this.modifyTimeline(false);
+    }, 500);
+
+    this.roomSwitchTask = new Task(async () => {
+      this.clearOddEvenMap();
+      this.observers.disconnectAll();
+      await this.update(false);
+    }, 500);
+
+    this.timelineReconstructTask = new Task(async () => {
+      this.observers.disconnectAll();
+      await this.update(false);
+    }, 500);
   }
 
-  const roomSwitchTask = new Task(async () => {
-    await onRoomChange();
-  }, 500);
+  async run() {
+    await this.update(true);
+  }
 
-  async function hookRoomSwitch() {
+  async update(isFirst) {
+    this.list = await waitForClassName("mx_RoomView_MessageList");
+    this.modifyTimeline(isFirst);
+
+    this.hookTimelineModification();
+    await this.hookRoomSwitch();
+    await this.hookTimelineReconstruct();
+  }
+
+  // ==== Hook modification to timeline DOM  ====
+
+  hookTimelineModification() {
+    this.observers.add(this.list, async () => {
+      this.updateTask.run();
+    });
+  }
+
+  async hookRoomSwitch() {
     // When switching room, all nodes gets replaced.
-
-    const observer = new MutationObserver(mutationsList => {
-      if (hasAddedNodes(mutationsList)) {
-        checkListAlive(roomSwitchTask).catch(e => console.error(e));
-      }
-    });
-    existingObservers.push(observer);
-
     const node = await waitForClassName("mx_MatrixChat");
-    observer.observe(node, {
-      childList: true,
+    this.observers.add(node, async () => {
+      if (!await this.isListAlive()) {
+        this.roomSwitchTask.run();
+      }
     });
   }
 
-  async function onTimelineReconstruct(first) {
-    if (!first) {
-      list = await waitForClassName("mx_RoomView_MessageList");
+  async hookTimelineReconstruct() {
+    // In some case (maybe on scroll down), timeline content gets replaced.
+    const node = await waitForClassName("mx_RoomView_timeline");
+    this.observers.add(node, async () => {
+      if (!await this.isListAlive()) {
+        this.timelineReconstructTask.run();
+      }
+    });
+  }
+
+  // Returns whether the `this.list` points the current list on the page.
+  // This gets false when the timeline gets replaced.
+  async isListAlive() {
+    const currentList = await waitForClassName("mx_RoomView_MessageList");
+    return this.list === currentList;
+  }
+
+  // ==== Timeline modification ====
+
+  modifyTimeline(isFirst) {
+    this.addDate();
+    this.colorTimeline(isFirst);
+  }
+
+  addDate() {
+    function pad2(n) {
+      return n.toString().padStart(2, "0");
     }
 
-    disconnectObservers();
-    hookTimelineModification();
-    addDate(list);
-    colorTimeline(first);
-    await hookRoomSwitch();
-    await hookTimelineReconstruct();
+    const timestamps = this.list.getElementsByClassName("mx_MessageTimestamp");
+    for (const timestamp of timestamps) {
+      const date = new Date(timestamp.getAttribute("title"));
+      const prefix = `${pad2(date.getMonth() + 1)}/${pad2(date.getDate())} `;
+      timestamp.setAttribute("ext-date", prefix);
+    }
   }
 
-  const timelineReconstructTask = new Task(async () => {
-    await onTimelineReconstruct(false);
-  }, 500);
+  colorTimeline(isFirst) {
+    const items = this.getItems();
+    const firstItemIsOdd = isFirst ? false : this.isFirstItemOdd(items);
+    this.noteOddEven(firstItemIsOdd, items);
+    this.setClass(firstItemIsOdd, items);
+  }
 
-  async function hookTimelineReconstruct() {
-    // In some case (maybe on scroll down), timeline content gets replaced.
-
-    const observer = new MutationObserver(mutationsList => {
-      if (hasAddedNodes(mutationsList)) {
-        checkListAlive(timelineReconstructTask).catch(e => console.error(e));
+  getItems() {
+    const items = [];
+    for (const item of this.list.childNodes) {
+      const nodeName = item.nodeName.toLowerCase();
+      if (nodeName === "li") {
+        if (item.classList.contains("mx_RoomView_myReadMarker_container")) {
+          continue;
+        }
+      } else if (nodeName === "div") {
+        if (!item.classList.contains("mx_EventListSummary")) {
+          continue;
+        }
+      } else {
+        continue;
       }
-    });
-    existingObservers.push(observer);
 
-    const node = await waitForClassName("mx_RoomView_timeline");
-    observer.observe(node, {
-      childList: true,
-    });
+      const token = item.getAttribute("data-scroll-tokens");
+      items.push({ node: item, token });
+    }
+    return items;
   }
 
-  await onTimelineReconstruct(true);
+  isFirstItemOdd(items) {
+    let firstItemIsOdd = false;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (item.token in this.oddEvenMap) {
+        firstItemIsOdd = this.oddEvenMap[item.token]
+          ? !(i % 2)
+          : !!(i % 2);
+        break;
+      }
+    }
+    return firstItemIsOdd;
+  }
+
+  setClass(odd, items) {
+    for (const item of items) {
+      item.node.classList.remove(odd ? "ext-line-even" : "ext-line-odd");
+      item.node.classList.add(odd ? "ext-line-odd" : "ext-line-even");
+      odd = !odd;
+    }
+  }
+
+  noteOddEven(firstItemIsOdd, items) {
+    const noteOne = (index, token) => {
+      const odd = firstItemIsOdd
+            ? !(index % 2)
+            : !!(index % 2);
+      this.oddEvenMap[token] = odd;
+    };
+
+    // Note the first one with token.
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.token) {
+        noteOne(i, item.token);
+        break;
+      }
+    }
+
+    // Note the last one with token.
+    for (let i = items.length - 1; i >= 0; i--) {
+      const item = items[i];
+      if (item.token) {
+        noteOne(i, item.token);
+        break;
+      }
+    }
+  }
+
+  clearOddEvenMap() {
+    this.oddEvenMap = {};
+  }
 }
 
 async function onLoad() {
-  await onRoomChange();
+  const modifier = new TimelineModifier();
+  modifier.run().catch(e => console.error(e));
 }
 
 onLoad().catch(e => console.error(e));
