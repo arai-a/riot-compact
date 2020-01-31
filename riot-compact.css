@@ -35,7 +35,7 @@
   font-size: 12pt;
 }
 
-/* ==== Put username and the first line in the same line ==== */
+/* ==== Put timestamp, avatar, username, and comment in the same line ==== */
 
 /*
  * |                                                            |
@@ -47,6 +47,7 @@
  * |         |        | |          |             |        |     |
  * +-------+ +--------+ +----------+ +---------+ +--------+     |
  * | 00:00 | | (icon) | | username | | comment | | option |     |
+ * | [abs] | | [abs]  | | [float]  | | comment | | [abs]  |     |
  * +-------+ +--------+ +----------+ +---------+ +--------+     |
  * |       |                         |         |                |
  * | 46px  |                         |         |                |
