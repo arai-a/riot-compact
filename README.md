@@ -1,3 +1,9 @@
-Style (and experimental extension) to make chat.mozilla.org log more compact.
+Style and some JS code to make chat.mozilla.org log more compact.
 
-Enabling "Use compact timeline layout" in General Settings might be necessary to make the style work properly.
+ * Username, avatar, and comment in the single line
+ * Same font size across timestamp/username/comment/etc
+ * Smaller avatar
+ * Compact rooms list
+ * Alternating line coloring (done by JS)
+
+Enabling "Use compact timeline layout" in General Settings is necessary to make this style work properly.
