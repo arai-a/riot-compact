@@ -232,15 +232,19 @@ class TimelineModifier {
     });
   }
 
-  // In some case (maybe on scroll down), timeline content gets replaced.
-  // Hook to it and update the internal references etc.
+  // Hook the reconstruction of timeline and update the internal references etc.
+  // In several events (scroll, opening sidebar, etc), timeline gets replaced,
+  // and the root node differs for each case.
   async hookTimelineReconstruct() {
-    const node = await waitForClassName("mx_RoomView_timeline");
-    this.observers.add(node, async () => {
-      if (!await this.isListAlive()) {
-        this.timelineReconstructTask.run();
-      }
-    });
+    for (let node = this.list;
+         node && !node.classList.contains("mx_MatrixChat");
+         node = node.parentNode) {
+      this.observers.add(node, async () => {
+        if (!await this.isListAlive()) {
+          this.timelineReconstructTask.run();
+        }
+      });
+    }
   }
 
   // Returns whether the `this.list` points the current list on the page.
