@@ -56,32 +56,11 @@
  * |              230px              |         |     100px      |
  * |<------------------------------->|         |<-------------->|
  * |                                                            |
- *
- *
- * |                                            |
- * |    113px   |  15px  |          |  90px  | 8px |
- * |<---------->|<------>|          |<------>|<--->|
- * |            |        |          |        |     |
- * +-------+    +--------+ +------+ +--------+     |
- * | 00:00 |    | avatar | | info | | option |     |
- * | [abs] |    | [abs]  | |      | | [abs]  |     |
- * +-------+    +--------+ +------+ +--------+     |
- * |       |               |      |                |
- * | 96px  |               |      |                |
- * |<----->|               |      |                |
- * |                       |      |                |
- * |          230px        |      |     100px      |
- * |<--------------------->|      |<-------------->|
- * |                                            |
  */
 
 div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   top: 4px;
   left: 98px;
-}
-
-.mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
-  left: 120px;
 }
 
 .mx_EventTile .mx_SenderProfile {
@@ -107,22 +86,81 @@ div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
   padding-left: 230px;
 }
 
+.mx_MessageActionBar {
+  top: 0px;
+}
+
+/*
+ * |                                             |
+ * |  98px   |  15px  |           |  90px  | 8px |
+ * |<------->|<------>|           |<------>|<--->|
+ * |         |        |           |        |     |
+ * +-------+ +--------+ +-------+ +--------+     |
+ * | 00:00 | | avatar | | emote | | option |     |
+ * | [abs] | | [abs]  | |       | | [abs]  |     |
+ * +-------+ +--------+ +-------+ +--------+     |
+ * |       |            |       |                |
+ * | 96px  |            |       |                |
+ * |<----->|            |       |                |
+ * |                    |       |                |
+ * |        115px       |       |     100px      |
+ * |<------------------>|       |<-------------->|
+ * |                                             |
+ */
+
 .mx_EventTile_emote .mx_EventTile_line,
 .mx_EventTile_emote .mx_EventTile_reply {
   padding-left: 115px;
+}
+
+/*
+ * |                                               |
+ * |    120px   |  15px  |          |  90px  | 8px |
+ * |<---------->|<------>|          |<------>|<--->|
+ * |            |        |          |        |     |
+ * +-------+    +--------+ +------+ +--------+     |
+ * | 00:00 |    | avatar | | info | | option |     |
+ * | [abs] |    | [abs]  | |      | | [abs]  |     |
+ * +-------+    +--------+ +------+ +--------+     |
+ * |       |               |      |                |
+ * | 96px  |               |      |                |
+ * |<----->|               |      |                |
+ * |                       |      |                |
+ * |          140px        |      |     100px      |
+ * |<--------------------->|      |<-------------->|
+ * |                                               |
+ */
+
+.mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
+  left: 120px;
 }
 
 .mx_EventTile_info .mx_EventTile_line {
   padding-left: 140px;
 }
 
-.mx_MessageActionBar {
-  top: 0px;
-}
+/*
+ * |                                    |
+ * |                     |  90px  | 8px |
+ * |                     |<------>|<--->|
+ * |                     |        |     |
+ * |         +---------+ +--------+     |
+ * |         | summary | | option |     |
+ * |         |         | | [abs]  |     |
+ * |         +---------+ +--------+     |
+ * |         |         |                |
+ * |         |         |                |
+ * |         |         |                |
+ * |         |         |                |
+ * |  120px  |         |     100px      |
+ * |<------->|         |<-------------->|
+ * |                                    |
+ */
 
 .mx_EventListSummary > .mx_EventTile_line {
   padding-left: 120px;
 }
+
 
 /* ==== Date before timestamp ==== */
 
