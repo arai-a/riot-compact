@@ -1,19 +1,35 @@
 /* ==== Lines with alternating color ==== */
 
-.mx_RoomView_MessageList > .ext-line-even {
+.ext-body-light .mx_RoomView_MessageList > .ext-line-even {
   background-color: #ffffff;
 }
 
-.mx_RoomView_MessageList > .ext-line-odd {
+.ext-body-dark .mx_RoomView_MessageList > .ext-line-even {
+  background-color: #000000;
+}
+
+.ext-body-light .mx_RoomView_MessageList > .ext-line-odd {
   background-color: #f4f4ff;
 }
 
-.mx_RoomView_MessageList li:hover {
+.ext-body-dark .mx_RoomView_MessageList > .ext-line-odd {
+  background-color: #202030;
+}
+
+.ext-body-light .mx_RoomView_MessageList li:hover {
   background-color: #f0ffff;
+}
+
+.ext-body-dark .mx_RoomView_MessageList li:hover {
+  background-color: #303040;
 }
 
 .mx_EventTile_line {
   background-color: inherit !important;
+}
+
+.ext-body-light .mx_MessageTimestamp {
+  color: #004080;
 }
 
 /* ==== Bigger text ==== */
@@ -28,7 +44,6 @@
 
 .mx_MessageTimestamp {
   font-size: 12pt;
-  color: #004080;
 }
 
 .mx_EventTile .mx_SenderProfile {

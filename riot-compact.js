@@ -115,6 +115,7 @@ class TimelineModifier {
   }
 
   async run() {
+    await this.hookStyleChange();
     await this.update(true);
   }
 
@@ -125,6 +126,55 @@ class TimelineModifier {
     this.hookTimelineModification();
     await this.hookRoomSwitch();
     await this.hookTimelineReconstruct();
+  }
+
+  // ==== Hook light/dark  ====
+
+  async hookStyleChange() {
+    // Wait for some random element to wait for link elements.
+    await waitForClassName("mx_MatrixChat");
+
+    const links = [];
+    function updateTheme() {
+      for (const link of links) {
+        if (link.node.hasAttribute("disabled")) {
+          continue;
+        }
+
+        if (link.isLight) {
+          document.body.classList.remove("ext-body-dark");
+          document.body.classList.add("ext-body-light");
+        } else {
+          document.body.classList.remove("ext-body-light");
+          document.body.classList.add("ext-body-dark");
+        }
+        break;
+      }
+    }
+
+    const obs = new MutationObserver(updateTheme);
+
+    for (const link of document.getElementsByTagName("link")) {
+      if (link.getAttribute("rel") !== "stylesheet") {
+        continue;
+      }
+
+      const title = link.getAttribute("title");
+      if (!title) {
+        continue;
+      }
+
+      const isLight = title.startsWith("Light");
+      const isDark = title.startsWith("Dark");
+      if (isLight || isDark) {
+        links.push({ node: link, isLight });
+        obs.observe(link, {
+          attributes: true,
+        });
+      }
+    }
+
+    updateTheme();
   }
 
   // ==== Hook modification to timeline DOM  ====
