@@ -6,4 +6,7 @@ Style and some JS code to make chat.mozilla.org log more compact.
  * Compact rooms list
  * Alternating line coloring (done by JS)
 
-Enabling "Use compact timeline layout" in General Settings is necessary to make this style work properly.
+WARNING
+
+ * Enabling "Use compact timeline layout" in General Settings is necessary to make this style work properly
+ * This style (especially coloring) works only on Light Theme (given unfortunaly there's no simple way to check theme color in CSS selector)
