@@ -194,11 +194,15 @@
   margin-right: 0px;
 }
 
-.mx_EventTile_line, .mx_EventTile_reply {
+:not(.mx_EventListSummary) > .mx_EventTile_line,
+:not(.mx_EventListSummary) > .mx_EventTile_reply {
   margin-right: 0px;
+}
+
+.mx_EventTile_line, .mx_EventTile_reply {
   min-height: auto;
   line-height: 16pt;
-  padding-right: 100px;
+  padding-right: 120px;
 }
 
 /* ==== Do not put username and image in the same line  ==== */
