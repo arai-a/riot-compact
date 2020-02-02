@@ -271,6 +271,9 @@ class TimelineModifier {
     // contain mutliple timestamps).
     const timestamps = this.list.getElementsByClassName("mx_MessageTimestamp");
     for (const timestamp of timestamps) {
+      if (timestamp.hasAttribute("ext-date")) {
+        continue;
+      }
       const date = new Date(timestamp.getAttribute("title"));
       const prefix = `${pad2(date.getMonth() + 1)}/${pad2(date.getDate())} `;
       timestamp.setAttribute("ext-date", prefix);
