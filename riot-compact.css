@@ -110,6 +110,10 @@
   clear: none;
 }
 
+.mx_ReplyThread .mx_DateSeparator {
+  clear: none;
+}
+
 /*
  * |                                                            |
  * |  98px   |  15px  |                          |  112px | 8px |
