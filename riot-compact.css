@@ -96,8 +96,7 @@
   padding-top: 0px !important;
 }
 
-.mx_RoomView_body .mx_EventTile:not(.mx_EventTile_emote):not(.mx_EventTile_info) .mx_EventTile_line,
-.mx_EventTile:not(.mx_EventTile_emote) .mx_EventTile_reply {
+.mx_RoomView_body .mx_EventTile:not(.mx_EventTile_emote):not(.mx_EventTile_info) .mx_EventTile_line {
   padding-left: 230px;
 }
 
@@ -105,13 +104,28 @@
   top: 0px;
 }
 
+/* reply */
+
+.mx_RoomView_body .mx_ReplyThread .mx_EventTile .mx_SenderProfile {
+  width: auto;
+}
+
+.mx_RoomView_body .mx_ReplyThread .mx_MTextBody {
+  clear: left;
+  margin-inline-start: 1em;
+}
+
 .mx_RoomView_body .mx_ReplyThread .mx_EventTile {
   /* Avoid putting reply in the different line than username. */
   clear: none;
 }
 
-.mx_ReplyThread .mx_DateSeparator {
+.mx_RoomView_body .mx_ReplyThread .mx_DateSeparator {
   clear: none;
+}
+
+.mx_RoomView_body .mx_ReplyThread .mx_EventTile_reply {
+  padding-inline-start: 0;
 }
 
 /*
@@ -233,7 +247,7 @@ div:not(.mx_EventTile_info) > .mx_EventTile_avatar {
 
 blockquote {
   margin-block-start: 0em;
-  margin-block-end: 0em;
+  margin-block-end: 0.5em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
