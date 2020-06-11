@@ -146,6 +146,7 @@
  * |                                                            |
  */
 
+.mx_EventTile_emote .mx_EventTile_content,
 .mx_EventTile_emote .mx_EventTile_line,
 .mx_EventTile_emote .mx_EventTile_reply {
   padding-left: 115px;
