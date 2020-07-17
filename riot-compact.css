@@ -88,9 +88,11 @@
   overflow: visible;
 }
 
+.mx_RoomView_body .mx_EventTile .mx_SenderProfile .mx_SenderProfile_aux,
 .mx_RoomView_body .mx_EventTile .mx_SenderProfile .mx_SenderProfile_name {
   white-space: normal;
 }
+
 
 .mx_RoomView_body .mx_EventTile {
   padding-top: 0px !important;
@@ -255,7 +257,8 @@ blockquote {
 
 /* ==== Compact rooms list ==== */
 
-.mx_RoomTile {
+.mx_RoomTile,
+.mx_RoomTile2 {
   height: 24px;
 }
 
@@ -331,4 +334,10 @@ blockquote {
 
 .mx_RoomView_MessageList {
   padding: 0px;
+}
+
+/* ==== Move copy button down in order to avoid overlapping with actions */
+
+.mx_EventTile_copyButton {
+  top: 32px;
 }
