@@ -257,9 +257,9 @@ blockquote {
 
 /* ==== Compact rooms list ==== */
 
-.mx_RoomTile,
 .mx_RoomTile2 {
-  height: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* ==== Smaller link preview ==== */
@@ -280,12 +280,21 @@ blockquote {
 
 /* ==== Smaller member list ==== */
 
-.mx_EntityTile_avatar, .mx_GroupRoomTile_avatar {
+.mx_EntityTile_avatar,
+.mx_GroupRoomTile_avatar,
+.mx_DecoratedRoomAvatar {
   padding: 2px;
   width: 18px;
   height: 18px;
   transform: scale(0.5);
   transform-origin: top left;
+}
+
+.mx_DecoratedRoomAvatar .mx_RoomTileIcon,
+.mx_TemporaryTile .mx_RoomTileIcon {
+    position: absolute;
+    bottom: -12px;
+    right: -16px;
 }
 
 .mx_EntityTile_power {
